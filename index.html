@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vinod Medical Store</title>
+<style>
+:root{--b:#0b5ed7;--bg:#eef4fc;--c:#fff;--t:#15233a;--m:#64748b;--l:#d5e0f0;--g:#16a34a;--r:#dc2626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1626;--c:#16233a;--t:#e6edf7;--m:#93a3bb;--l:#2a3a56}}
+:root[data-theme="dark"]{--bg:#0d1626;--c:#16233a;--t:#e6edf7;--m:#93a3bb;--l:#2a3a56}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--t);font-size:15px;line-height:1.4;font-family:system-ui,"Noto Sans Devanagari",sans-serif}
+button{font-family:inherit;font-size:15px}
+#app{max-width:480px;margin:0 auto;height:100%;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+@media(min-width:600px){#app{box-shadow:0 0 40px #0003;border-inline:1px solid var(--l)}}
+#hd{display:none;background:var(--b);color:#fff;padding:14px;gap:10px;align-items:center;font-weight:600;font-size:17px}
+#hd button{background:none;border:0;color:#fff;font-size:22px;cursor:pointer}
+#m{flex:1;overflow:auto;padding:14px}
+#nv{display:none;background:var(--c);border-top:1px solid var(--l)}
+#nv button{flex:1;border:0;background:none;padding:8px;color:var(--b);font-size:11px;cursor:pointer}#nv b{display:block;font-size:20px;font-weight:400}
+.card{background:var(--c);border:1px solid var(--l);border-radius:12px;padding:12px;margin-bottom:12px}
+label{display:block;font-size:13px;color:var(--m);margin:10px 0 4px}
+input,select{width:100%;padding:11px;border:1px solid var(--l);border-radius:8px;background:var(--c);color:var(--t);font:inherit}
+.btn{width:100%;padding:13px;border:0;border-radius:8px;background:var(--b);color:#fff;font-weight:600;margin-top:12px;cursor:pointer}
+.btn.o{background:none;border:1.5px solid var(--b);color:var(--b)}.btn.g{background:var(--g)}.btn.d{background:none;border:1.5px solid var(--r);color:var(--r)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{border:0;border-radius:14px;color:#fff;padding:24px 8px;font-weight:600;cursor:pointer}.tile b{display:block;font-size:34px;font-weight:400}
+.li{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;cursor:pointer;border-bottom:1px solid var(--l)}.li:last-child{border:0}.li small{color:var(--m)}
+.sp{position:absolute;inset:0;background:linear-gradient(160deg,#0b5ed7,#0a3f94);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.sp .lg{font-size:70px;background:#fff;color:var(--b);border-radius:50%;width:110px;height:110px;display:grid;place-items:center;margin-bottom:16px}
+.chip{font-size:11px;padding:2px 8px;border-radius:99px;background:#fee2e2;color:var(--r);margin-left:4px}.chip.a{background:#fef3c7;color:#b45309}.chip.k{background:#dcfce7;color:#15803d}
+.x{color:var(--r);border:0;background:none;font-size:18px;cursor:pointer}
+.stat{background:var(--c);border:1px solid var(--l);border-radius:12px;padding:12px;text-align:center}.stat b{display:block;font-size:22px;color:var(--b)}.stat small{color:var(--m)}
+#vo{display:none;position:absolute;inset:0;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;z-index:5}
+#vo .mic{font-size:60px;border:3px solid var(--b);border-radius:50%;width:120px;height:120px;display:grid;place-items:center;margin-bottom:16px}
+#tst{position:absolute;left:50%;bottom:80px;transform:translateX(-50%);background:#111c;color:#fff;padding:8px 16px;border-radius:99px;display:none;z-index:9;font-size:13px;text-align:center}
+.bill{background:#fff;color:#111;padding:14px;border-radius:10px;font-size:13px;border:1px solid #cbd5e1}
+.bill table{width:100%;border-collapse:collapse;margin:8px 0}.bill th,.bill td{padding:5px 3px;border-bottom:1px solid #e2e8f0;text-align:left}.bill .r{text-align:right}
+#pb{display:none}
+@media print{body{background:#fff}#app{display:none}#pb{display:block!important}}
+</style></head>
+<body>
+<div id="app"><div id="hd"></div><div id="m"></div>
+<div id="nv"><button onclick="go('home')"><b>🏠</b>होम</button><button onclick="go('hist')"><b>🧾</b>इतिहास</button><button onclick="go('stock')"><b>📦</b>स्टॉक</button><button onclick="go('set')"><b>⚙️</b>सेटिंग्स</button></div>
+<div id="vo"><div class="mic">🎤</div><h3>सुन रहा हूँ…</h3><div class="card" id="vt" style="min-width:80%;min-height:60px"></div><button class="btn" onclick="VR&&VR.stop()">⏹ रोकें</button></div>
+<div id="tst"></div></div>
+<div id="pb"></div>
+<script>
+const $=s=>document.querySelector(s),p=n=>String(n).padStart(2,'0');
+const x=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dmy=s=>s?s.split('-').reverse().join('-'):'';
+const R2=n=>Math.round(n*100)/100;
+let S=null;try{S=JSON.parse(localStorage.getItem('vm'))}catch(e){}
+S=S||{in:0,n:123,sales:[],st:{name:'Vinod Medical Store',addr:'Raniganj Bazar, Ballia (U.P.)',gst:'09ABCDE1234F1Z5',dl:'DL/UP/2023/123456'},
+stock:[{n:'Paracetamol 500mg',q:50,e:'2027-01-01',r:25,t:10,b:'B12345'},{n:'Amoxicillin 500mg',q:30,e:'2026-12-05',r:85,t:10,b:'A2231'},{n:'ORS Powder',q:20,e:'2026-12-12',r:45,t:1,b:'O778'},{n:'Cetirizine 10mg',q:40,e:'2027-08-12',r:30,t:10,b:'C990'},{n:'Pantoprazole 40mg',q:25,e:'2027-09-26',r:110,t:10,b:'P451'}]};
+S.url=S.url||'https://script.google.com/macros/s/AKfycbx5z4S43Fe5t0aCAjHUtc4hAso9HhdJt_gq6I0snp3phVjPu6IPX1qnpgXwkmTk96lPGw/exec';S.key=S.key||'vinod1234';S.q=S.q||[];
+const save=()=>{try{localStorage.setItem('vm',JSON.stringify(S))}catch(e){}};
+let D={doc:{},pat:{},items:[]},VR=null,CUR='',SY='',FL=0;
+const nowIso=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,16);
+const tot=a=>R2(a.reduce((s,i)=>s+i.a,0));
+function toast(t){const e=$('#tst');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2200)}
+function render(t,b,o={}){const h=$('#hd');h.style.display=t?'flex':'none';h.innerHTML=(o.back?`<button onclick="go('${o.back}')">←</button>`:'')+`<span style="flex:1">${x(t)}</span><small id="sy" style="font-size:11px;font-weight:400">${x(SY)}</small>`;$('#m').innerHTML=b;$('#nv').style.display=o.nav?'flex':'none'}
+const go=(n,a)=>{CUR=n;V[n](a);$('#m').scrollTop=0};
+const val=id=>($('#'+id)||{}).value||'';
+const upd=()=>{const e=$('#sy');if(e)e.textContent=SY};
+const stHead=()=>`<b style="font-size:17px;color:#0b5ed7">${x(S.st.name)}</b><br>${x(S.st.addr)}<br>GSTIN: ${x(S.st.gst)}<br>Drug Licence No.: ${x(S.st.dl)}`;
+const dleft=e=>e?(new Date(e)-Date.now())/864e5:999;
+const alerts=()=>S.stock.filter(s=>s.q<=20||dleft(s.e)<90);
+
+/* ---------- Google Sheets sync ---------- */
+async function api(b){const r=await fetch(S.url,{method:'POST',body:JSON.stringify({...b,key:S.key})});const j=await r.json();if(!j.ok)throw new Error(j.err);return j}
+function push(op){if(!S.url)return;if(op.action=='stock')S.q=S.q.filter(o=>o.action!='stock');S.q.push(op);save();flush()}
+async function flush(){if(!S.url||FL)return;FL=1;SY='⏳ सिंक…';upd();
+ try{while(S.q.length){await api(S.q[0]);S.q.shift();save()}SY='☁️ सिंक ✓'}catch(e){S.err=String(e.message||e);save();SY='⚠️ सेव नहीं हुआ ('+S.q.length+')';toast('Sheet error: '+S.err)}FL=0;upd()}
+function syncAll(){if(!S.url)return toast('पहले URL डालें');S.sales.forEach(s=>S.q.push({action:'sale',sale:s}));S.q=S.q.filter(o=>o.action!='stock');S.q.push({action:'stock',stock:S.stock});save();flush();toast('सारा डेटा भेजा जा रहा है…')}
+async function load(manual){if(!S.url){if(manual)toast('पहले Sheet URL डालें');return}
+ await flush();if(S.q.length){if(manual)toast('पहले पुराना डेटा सिंक नहीं हुआ');return}
+ try{SY='⏳ लोड…';upd();const r=await fetch(S.url+'?key='+encodeURIComponent(S.key));const j=await r.json();
+  if(!j.ok)throw new Error(j.err);
+  const have=new Set(j.sales.map(s=>s.no)),loc=S.sales.filter(s=>!have.has(s.no));S.sales=[...loc,...j.sales];loc.forEach(s=>S.q.push({action:'sale',sale:s}));if(j.stock.length)S.stock=j.stock;else S.q.push({action:'stock',stock:S.stock});
+  S.n=Math.max(123,...S.sales.map(s=>parseInt(String(s.no).split('/').pop())||0));save();if(S.q.length)await flush();else SY='☁️ सिंक ✓';
+  if(['home','hist','stock'].includes(CUR))go(CUR);if(manual)toast('Sheet से डेटा आ गया ✓')
+ }catch(e){SY='⚠️ '+(e.message||'ऑफलाइन');upd();if(manual)toast(/fetch/i.test(e.message)?'कनेक्ट नहीं हुआ: Deploy में Access=Anyone रखें':'कनेक्ट नहीं हुआ: '+e.message)}}
+
+/* ---------- Screens ---------- */
+const V={
+splash(){render('',`<div class="sp"><div class="lg">⚕️</div><h1 style="margin:0">${x(S.st.name)}</h1><p>${x(S.st.addr)}</p><p style="font-size:18px">आपके स्वास्थ्य की हमेशा चिंता</p><small>Pharmacy Billing &amp; Management</small></div>`);setTimeout(()=>go(S.in?'home':'login'),1200);if(S.in)load()},
+login(){render('',`<div style="text-align:center;margin-top:30px"><div style="font-size:60px">⚕️</div><h2 style="color:var(--b);margin:4px">${x(S.st.name)}</h2><p style="margin:0">${x(S.st.addr)}</p></div>
+<div class="card" style="margin-top:24px"><label>यूज़र नाम</label><input id="u" autocomplete="username"><label>पासवर्ड</label><input id="pw" type="password" autocomplete="current-password"><button class="btn" onclick="login()">लॉगिन करें</button></div>`)},
+home(){const ti=nowIso().slice(0,10),td=S.sales.filter(s=>s.iso==ti),sum=R2(td.reduce((a,s)=>a+s.total,0)),al=alerts().length;
+render(S.st.name,`<div class="card" style="font-size:12px">${stHead()}</div>
+<div class="two" style="margin-bottom:12px"><div class="stat"><b>₹${sum}</b><small>आज की बिक्री</small></div><div class="stat"><b>${td.length}</b><small>आज के बिल</small></div></div>
+${al?`<div class="card li" style="color:var(--r)" onclick="go('stock')"><span>⚠️ ${al} दवाओं पर स्टॉक/एक्सपायरी अलर्ट</span><span>›</span></div>`:''}
+<div class="grid">
+<button class="tile" style="background:#16a34a" onclick="newSale()"><b>➕</b>नई बिक्री<br><small>(पर्ची से)</small></button>
+<button class="tile" style="background:#0b7bd7" onclick="go('hist')"><b>🧾</b>बिक्री इतिहास</button>
+<button class="tile" style="background:#7c3aed" onclick="go('stock')"><b>📦</b>दवा स्टॉक</button>
+<button class="tile" style="background:#f59e0b" onclick="go('set')"><b>⚙️</b>सेटिंग्स</button></div>
+<p style="text-align:center;color:var(--m)">कुल ${S.sales.length} बिल</p>`,{nav:1})},
+doc(){render('डॉक्टर की जानकारी',`<label>डॉक्टर का नाम *</label><input id="dn" value="${x(D.doc.n)}" placeholder="Dr. Rajesh Kumar"><label>रजिस्ट्रेशन नंबर *</label><input id="dr" value="${x(D.doc.r)}" placeholder="UPMC12345"><label>स्पेशलाइज़ेशन</label><select id="ds">${['General Physician','Pediatrician','Orthopedic','Gynecologist','Other'].map(s=>`<option ${D.doc.s==s?'selected':''}>${s}</option>`).join('')}</select><button class="btn" onclick="docNext()">सेव करें</button>`,{back:'home'})},
+pat(){render('मरीज की जानकारी',`<label>मरीज का नाम (वैकल्पिक)</label><input id="pn" value="${x(D.pat.n)}" placeholder="Ramesh Kumar"><label>मोबाइल नंबर (वैकल्पिक)</label><input id="pm" type="tel" value="${x(D.pat.m)}" placeholder="9876543210"><label>तारीख और समय</label><input id="pd" type="datetime-local" value="${D.pat.d||nowIso()}"><button class="btn" onclick="patNext()">आगे बढ़ें</button>`,{back:'doc'})},
+add(){const it=D.items;render('दवा जोड़ें',`${it.length?`<div class="card" style="padding:0">${it.map((i,k)=>`<div class="li" style="cursor:default"><div><b>${x(i.n)}</b><br><small>${i.q} ${i.u=='tab'?'गोली':'Strip'} × ₹${i.r}</small></div><div>₹${i.a}<button class="x" onclick="delItem(${k})">✕</button></div></div>`).join('')}</div>`:''}
+<button class="btn o" style="margin:0 0 10px" onclick="voice()">🎤 बोलकर भरें</button>
+<label>दवा का नाम *</label><input id="in" list="dl" oninput="fill()" placeholder="दवा का नाम खोजें या लिखें"><datalist id="dl">${S.stock.map(s=>`<option value="${x(s.n)}">`).join('')}</datalist>
+<div class="two"><div><label>पत्ते का रेट (₹) *</label><input id="ir" type="number" inputmode="decimal"></div><div><label>एक पत्ते में टैबलेट *</label><input id="it" type="number" value="10"></div></div>
+<div class="two"><div><label>मात्रा *</label><input id="iq" type="number" value="1"></div><div><label>इकाई</label><select id="iu"><option value="strip">पत्ता (Strip)</option><option value="tab">गोली (Tablet)</option></select></div></div>
+<div class="two"><div><label>बैच नंबर</label><input id="ib"></div><div><label>मैन्युफैक्चरिंग डेट</label><input id="im" type="date"></div></div>
+<label>एक्सपायरी डेट</label><input id="ie" type="date">
+<button class="btn" onclick="addItem()">➕ दवा जोड़ें</button>
+${it.length?`<div class="two"><div><label>छूट (₹)</label><input id="dc" type="number" inputmode="decimal" value="${D.disc||''}"></div><div><label>भुगतान</label><select id="pay">${['Cash','UPI','Card','उधार'].map(s=>`<option ${D.pay==s?'selected':''}>${s}</option>`).join('')}</select></div></div><button class="btn g" onclick="toPrev()">बिल देखें (₹${tot(it)})</button>`:''}`,{back:'pat'})},
+prev(){render('बिल पूर्वावलोकन',billH(mkSale('(नया बिल)'))+`<button class="btn g" onclick="saveBill()">✔ बिल सेव करें</button><button class="btn o" onclick="go('add')">और दवा जोड़ें</button>`,{back:'add'})},
+done(){const s=S.sales[0];render('बिल तैयार',`<div style="text-align:center;margin-top:20px"><div style="font-size:70px;color:var(--g)">✅</div><p><b>बिल सेव हो गया!</b></p><div class="card">📄 ${x(s.no.replace(/\//g,'_'))}.pdf<br><small>${S.url?'Google Sheet में भेजा जा रहा है…':'सिर्फ फोन में सेव (Sheet जुड़ी नहीं)'}</small></div></div><button class="btn o" onclick="go('view',0)">बिल देखें</button><button class="btn" onclick="share(0)">शेयर करें</button><button class="btn o" onclick="go('prn',0)">🖨 प्रिंट बिल</button><button class="btn o" onclick="go('home')">होम पर जाएँ</button>`,{})},
+view(i){const s=S.sales[i];render('बिल',billH(s)+`<button class="btn" onclick="printBill(${i})">🖨 प्रिंट / PDF सेव करें</button><button class="btn o" onclick="share(${i})">शेयर करें</button>${s.pat.m?`<button class="btn g" onclick="wa(${i})">WhatsApp पर भेजें</button>`:''}<button class="btn d" onclick="delSale(${i})">🗑 बिल हटाएँ</button>`,{back:'hist'})},
+prn(i){render('प्रिंट बिल',`<div style="text-align:center;font-size:60px;margin-top:20px">🖨</div><h3 style="text-align:center">थर्मल प्रिंटर से प्रिंट करें</h3><select><option>Bluetooth Printer</option><option>USB / सिस्टम प्रिंटर</option></select><button class="btn" onclick="printBill(${i})">🖨 प्रिंट करें</button><button class="btn o" onclick="testPrint()">टेस्ट प्रिंट</button>`,{back:'done'})},
+hist(){render('बिक्री इतिहास',`<input placeholder="🔍 बिल नंबर / मरीज / डॉक्टर खोजें" oninput="hl(this.value)" style="margin-bottom:8px"><input id="hdt" type="date" oninput="hl(val('hq'))" style="margin-bottom:12px"><div class="card" style="padding:0" id="hl"></div>`.replace('oninput="hl(this.value)"','id="hq" oninput="hl(this.value)"'),{nav:1});hl('')},
+stock(){render('दवा स्टॉक',`<input placeholder="🔍 दवा का नाम खोजें" oninput="sl(this.value)" style="margin-bottom:12px"><div class="card" style="padding:0" id="sl"></div>
+<div class="card"><b>स्टॉक जोड़ें / अपडेट</b> <small style="color:var(--m)">(नाम वही लिखें तो मात्रा जुड़ जाएगी)</small><label>दवा का नाम</label><input id="sn"><div class="two"><div><label>मात्रा (पत्ते)</label><input id="sq" type="number"></div><div><label>रेट (₹)</label><input id="sr" type="number"></div></div><div class="two"><div><label>एक्सपायरी</label><input id="se" type="date"></div><div><label>बैच</label><input id="sb"></div></div><button class="btn" onclick="addStock()">सेव करें</button></div>`,{nav:1});sl('')},
+set(){render('सेटिंग्स',`<div class="card"><b>☁️ Google Sheet कनेक्शन</b><label>Apps Script Web App URL</label><input id="s5" value="${x(S.url)}" placeholder="https://script.google.com/macros/s/.../exec"><label>Secret Key</label><input id="s6" type="password" value="${x(S.key)}"><button class="btn" onclick="saveSt()">सेव + कनेक्ट करें</button><button class="btn o" onclick="load(1)">🔄 अभी Sheet से सिंक करें</button><button class="btn o" onclick="syncAll()">⬆️ सारा डेटा Sheet में भेजें</button><p style="color:var(--m);font-size:12px">${x(SY)||'कनेक्ट नहीं'} · बाकी: ${S.q.length}</p>${S.err?`<p style="color:var(--r);font-size:12px">आखिरी error: ${x(S.err)}</p>`:''}</div>
+<div class="card"><b>स्टोर जानकारी</b><label>स्टोर का नाम</label><input id="s1" value="${x(S.st.name)}"><label>पता</label><input id="s2" value="${x(S.st.addr)}"><label>GST नंबर</label><input id="s3" value="${x(S.st.gst)}"><label>ड्रग लाइसेंस</label><input id="s4" value="${x(S.st.dl)}"><button class="btn" onclick="saveSt()">सेव करें</button></div>
+<div class="card li" onclick="go('stock')"><span>⚠️ स्टॉक अलर्ट (एक्सपायरी)</span><span>›</span></div><div class="card li" style="color:var(--r)" onclick="logout()"><span>↪ लॉग आउट</span></div>`,{nav:1})}};
+
+/* ---------- Actions ---------- */
+function login(){if(!val('u')||!val('pw'))return toast('यूज़र नाम और पासवर्ड भरें');S.in=1;save();go('home');load()}
+function logout(){S.in=0;save();go('login')}
+function newSale(){D={doc:{},pat:{},items:[]};go('doc')}
+function docNext(){const n=val('dn').trim(),r=val('dr').trim();if(!n||!r)return toast('डॉक्टर का नाम और रजिस्ट्रेशन नंबर भरें');D.doc={n,r,s:val('ds')};go('pat')}
+function patNext(){D.pat={n:val('pn'),m:val('pm'),d:val('pd')};go('add')}
+function fill(){const k=S.stock.find(s=>s.n.toLowerCase()==val('in').toLowerCase());if(k){$('#ir').value=k.r;$('#it').value=k.t;$('#ib').value=k.b||'';$('#ie').value=k.e||''}}
+function addItem(){const n=val('in').trim(),r=+val('ir'),t=+val('it')||1,q=+val('iq'),u=val('iu');if(!n||!r||!q)return toast('नाम, रेट और मात्रा भरें');
+const k=S.stock.find(z=>z.n.toLowerCase()==n.toLowerCase());if(k&&k.q<(u=='tab'?q/t:q))toast('⚠️ स्टॉक कम है (बचा: '+k.q+' पत्ते)');
+D.items.push({n,r,t,q,u,b:val('ib'),m:val('im'),e:val('ie'),a:R2(u=='tab'?r/t*q:r*q)});go('add')}
+function delItem(k){D.items.splice(k,1);go('add')}
+function toPrev(){D.disc=Math.max(0,+val('dc')||0);D.pay=val('pay')||'Cash';go('prev')}
+function mkSale(no){const d=(D.pat.d||nowIso()).split('T'),sub=tot(D.items),disc=Math.min(D.disc||0,sub);
+return{no,iso:d[0],date:dmy(d[0]),time:d[1]||'',doc:D.doc,pat:D.pat,items:D.items,sub,disc,pay:D.pay||'Cash',total:R2(sub-disc)}}
+function billH(s){const d=s.doc||{},pt=s.pat||{};return `<div class="bill"><div>${stHead()}</div><hr><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><span>Bill No: <b>${x(s.no)}</b><br>Doctor: ${x(d.n)}<br>Reg. No.: ${x(d.r)}</span><span>Date: ${x(s.date)}<br>${x(s.time)}</span></div><p>Patient: <b>${x(pt.n||'—')}</b> ${x(pt.m)}</p>
+<table><tr><th>#</th><th>दवा का नाम</th><th>Qty</th><th class="r">Rate</th><th class="r">Amount</th></tr>${s.items.map((i,k)=>`<tr><td>${k+1}</td><td>${x(i.n)}${i.b?`<br><small>B:${x(i.b)} Exp:${dmy(i.e)}</small>`:''}</td><td>${i.q} ${i.u=='tab'?'Tab':'Strip'}</td><td class="r">₹${i.r}</td><td class="r">₹${i.a}</td></tr>`).join('')}</table>
+${s.disc>0?`<div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>₹${(+s.sub).toFixed(2)}</span></div><div style="display:flex;justify-content:space-between"><span>Discount</span><span>- ₹${(+s.disc).toFixed(2)}</span></div>`:''}
+<div style="display:flex;justify-content:space-between;font-size:17px"><b>Grand Total</b><b>₹${(+s.total).toFixed(2)}</b></div><p style="margin:6px 0 0">Payment: ${x(s.pay||'Cash')}</p><p style="text-align:center;margin:10px 0 0">Thank You ! Visit Again</p></div>`}
+function saveBill(){const no=`VM/${new Date().getFullYear()}/${String(++S.n).padStart(4,'0')}`,s=mkSale(no);
+s.items.forEach(i=>{const k=S.stock.find(z=>z.n.toLowerCase()==i.n.toLowerCase());if(k)k.q=Math.max(0,R2(k.q-(i.u=='tab'?i.q/i.t:i.q)))});
+S.sales.unshift(s);save();push({action:'sale',sale:s});push({action:'stock',stock:S.stock});go('done')}
+function delSale(i){const s=S.sales[i];if(!confirm('बिल '+s.no+' हटाएँ? (स्टॉक वापस नहीं जुड़ेगा)'))return;S.sales.splice(i,1);save();push({action:'delSale',no:s.no});go('hist')}
+function hl(q){q=(q||'').toLowerCase();const dt=val('hdt');const l=S.sales.map((s,i)=>[s,i]).filter(([s])=>(s.no+(s.pat.n||'')+(s.doc.n||'')).toLowerCase().includes(q)&&(!dt||s.iso==dt));
+const sum=R2(l.reduce((a,[s])=>a+s.total,0));
+$('#hl').innerHTML=l.length?`<div class="li" style="cursor:default;background:var(--bg)"><b>${l.length} बिल</b><b>कुल ₹${sum}</b></div>`+l.map(([s,i])=>`<div class="li" onclick="go('view',${i})"><div><b>${x(s.no)}</b> <span class="chip k">${x(s.pay||'Cash')}</span><br><small>${x(s.date)} ${x(s.pat.n)}</small></div><b>₹${(+s.total).toFixed(2)} ›</b></div>`).join(''):'<p style="padding:14px;color:var(--m)">कोई बिल नहीं मिला</p>'}
+function sl(q){q=q.toLowerCase();$('#sl').innerHTML=S.stock.map((s,i)=>[s,i]).filter(([s])=>s.n.toLowerCase().includes(q)).map(([s,i])=>{const dd=dleft(s.e);return `<div class="li" onclick="editStock(${i})"><div><b>${x(s.n)}</b>${s.q<=20?'<span class="chip a">कम स्टॉक</span>':''}${dd<90?'<span class="chip">'+(dd<0?'एक्सपायर':'जल्द एक्सपायर')+'</span>':''}<br><small>Qty: ${s.q} &nbsp; Exp: ${dmy(s.e)} ${s.b?'&nbsp; B:'+x(s.b):''}</small></div><div><b>₹${s.r}</b><button class="x" onclick="event.stopPropagation();delStock(${i})">✕</button></div></div>`}).join('')}
+function editStock(i){const s=S.stock[i];$('#sn').value=s.n;$('#sr').value=s.r;$('#se').value=s.e||'';$('#sb').value=s.b||'';$('#sq').value='';$('#sq').placeholder='जोड़ने की मात्रा';toast('मात्रा डालकर सेव करें')}
+function delStock(i){if(!confirm(S.stock[i].n+' हटाएँ?'))return;S.stock.splice(i,1);save();push({action:'stock',stock:S.stock});go('stock')}
+function addStock(){const n=val('sn').trim();if(!n||!val('sq'))return toast('नाम और मात्रा भरें');const k=S.stock.find(z=>z.n.toLowerCase()==n.toLowerCase());
+if(k){k.q=R2(k.q+ +val('sq'));if(val('sr'))k.r=+val('sr');if(val('se'))k.e=val('se');if(val('sb'))k.b=val('sb')}else S.stock.push({n,q:+val('sq'),r:+val('sr')||0,e:val('se'),t:10,b:val('sb')});
+save();push({action:'stock',stock:S.stock});go('stock');toast('स्टॉक सेव हो गया')}
+function saveSt(){if($('#s1'))S.st={name:val('s1')||S.st.name,addr:val('s2'),gst:val('s3'),dl:val('s4')};
+if($('#s5')){S.url=val('s5').trim();S.key=val('s6').trim()}save();toast('सेव हो गया');if(S.url&&$('#s5')){push({action:'stock',stock:S.stock});load(1)}}
+function printBill(i){$('#pb').innerHTML=billH(S.sales[i]);window.print()}
+function testPrint(){$('#pb').innerHTML=`<h3>TEST PRINT</h3><p>${x(S.st.name)}</p>`;window.print()}
+const txt=s=>`${S.st.name}\nBill ${s.no} | ${s.date}\n`+s.items.map(i=>`${i.n} x${i.q} = ₹${i.a}`).join('\n')+`\nTotal: ₹${(+s.total).toFixed(2)}\nधन्यवाद!`;
+function share(i){const s=S.sales[i],t=txt(s);if(navigator.share)navigator.share({title:s.no,text:t}).catch(()=>{});else{try{navigator.clipboard.writeText(t);toast('बिल की जानकारी कॉपी हो गई')}catch(e){toast('शेयर सपोर्ट नहीं है')}}}
+function wa(i){const s=S.sales[i];let m=String(s.pat.m).replace(/\D/g,'');if(m.length==10)m='91'+m;window.open('https://wa.me/'+m+'?text='+encodeURIComponent(txt(s)),'_blank')}
+function voice(){const R=window.SpeechRecognition||window.webkitSpeechRecognition;if(!R)return toast('इस ब्राउज़र में वॉइस सपोर्ट नहीं है');
+$('#vo').style.display='flex';$('#vt').textContent='';const r=new R();VR=r;r.lang='hi-IN';r.interimResults=true;
+r.onresult=e=>{$('#vt').textContent=[...e.results].map(z=>z[0].transcript).join(' ')};
+r.onend=()=>{const t=$('#vt').textContent;$('#vo').style.display='none';if(t)parseV(t)};
+r.onerror=()=>{$('#vo').style.display='none';toast('माइक की अनुमति दें')};r.start()}
+function parseV(t){const g=re=>(t.match(re)||[])[1],set=(id,v)=>{if(v)$('#'+id).value=v};
+set('in',t.split(/[,،]/)[0].trim());set('ir',g(/(?:रेट|rate)\D{0,12}?(\d+)/i));set('it',g(/(\d+)\s*(?:गोली|टैबलेट|tablet)/i));
+set('ib',g(/(?:बैच|batch)\s*(?:नंबर|number)?\s*([A-Za-z]*\d+[A-Za-z0-9]*)/i));
+const e=t.match(/(?:एक्सपायरी|expiry)\s*(\d{1,2})[-\/ ](\d{1,2})[-\/ ](\d{4})/i);if(e)set('ie',`${e[3]}-${p(e[2])}-${p(e[1])}`);fill()}
+window.addEventListener('online',flush);
+go('splash');
+</script></body></html>
